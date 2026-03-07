@@ -8,31 +8,21 @@ class KaelBot(commands.Bot):
         intents.message_content = True 
         
         super().__init__(
-            command_prefix='!', 
+            command_prefix='!', # Still needed for internal logic
             intents=intents,
             status=discord.Status.dnd,
             activity=discord.CustomActivity(name="@ kael for help")
         )
 
-    async def on_ready(self):
-        print("--- SYSTEM ONLINE ---")
-        print(f"Operative: {self.user.name}")
-        print(f"ID: {self.user.id}")
-        print(f"Latency: {round(self.latency * 1000)}ms")
-        print("---------------------")
-
     async def setup_hook(self):
-        # This is where we will eventually load 'Cogs' (modules)
-        print("Initializing tactical modules...")
+        # Load the General Cog
+        await self.load_extension('cogs.general')
+        print("Tactical Module: General [LOADED]")
+        
+        await self.tree.sync()
+        print("Slash Commands: [SYNCED]")
 
 bot = KaelBot()
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send(f"**PONG.** System latency is {round(bot.latency * 1000)}ms.")
-
 token = os.getenv('TOKEN')
-if token:
-    bot.run(token)
-else:
-    print("ERROR: No 'TOKEN' found in environment variables.")
+bot.run(token)

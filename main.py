@@ -16,7 +16,7 @@ class KaelBot(commands.Bot):
 
     async def setup_hook(self):
         # Load the General Cog
-        await self.load_extension('cogs.general')
+        await self.load_extension('cogs.ping')
         print("Tactical Module: General [LOADED]")
         
         await self.tree.sync()
